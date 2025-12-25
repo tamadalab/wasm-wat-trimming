@@ -1,0 +1,147 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # 1. Bubble Sort (bubsort)
+  # ソース: data/bubsort/src/
+  # ==========================================
+
+  bubsort-c:
+    build: ./docker-images/c
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/c:/output
+    command: emcc /src/bubsうort.c -O3 -o /output/bubsort.wasm
+
+  bubsort-js:
+    build: ./docker-images/js
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/js:/output
+    # Javyを使って JS -> Wasm にコンパイル
+    command: javy compile /src/bubsort.js -o /output/bubsort.wasm
+
+  bubsort-ts:
+    build: ./docker-images/ts
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/ts:/output
+    # ascコマンドでコンパイル
+    # -O3: 最適化レベル3 (C言語の指定と合わせる)
+    # --outFile: 出力先
+    command: asc /src/bubsort.ts -O3 --outFile /output/bubsort.wasm
+
+  bubsort-go:
+    build: ./docker-images/go
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/go:/output
+    # -target=wasm: Wasm向けにビルド
+    # -no-debug: デバッグ情報を削除してWATファイルを読みやすくする（構造分析に推奨）
+    command: tinygo build -o /output/bubsort.wasm -target=wasm -no-debug /src/bubsort.go
+
+  bubsort-rust:
+    build: ./docker-images/rust
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/rust:/output
+    # rustcコマンドでコンパイル
+    # --crate-type=cdylib: C互換の動的ライブラリとしてビルド（Wasmではこれが標準）
+    # -O: 最適化
+    command: rustc /src/lib.rs --crate-type=cdylib --target=wasm32-unknown-unknown -O -o /output/bubsort.wasm
+
+  # ==========================================
+  # 2. Collatz Problem (collatz)
+  # ==========================================
+
+  collatz-go:
+    build: ./docker-images/go
+    volumes:
+      - ./data/collatz/src:/src
+      - ./data/collatz/go:/output
+    # Bubble Sortと同じオプション設定
+    command: tinygo build -o /output/collatz.wasm -target=wasm -no-debug /src/collatz.go
+
+  collatz-js:
+    build: ./docker-images/js
+    platform: linux/amd64   # Javyがx86_64用のため必須
+    volumes:
+      - ./data/collatz/src:/src
+      - ./data/collatz/js:/output
+    command: javy compile /src/collatz.js -o /output/collatz.wasm
+
+  collatz-rust:
+    build: ./docker-images/rust
+    volumes:
+      - ./data/collatz/src:/src
+      - ./data/collatz/rust:/output
+    # 最適化(-O)をしてライブラリ形式(cdylib)でビルド
+    command: rustc /src/lib.rs --crate-type=cdylib --target=wasm32-unknown-unknown -O -o /output/collatz.wasm
+
+  collatz-c:
+    build: ./docker-images/c
+    volumes:
+      - ./data/collatz/src:/src
+      - ./data/collatz/c:/output
+    # -O3: 最適化レベル3
+    command: emcc /src/collatz.c -O3 -o /output/collatz.wasm
+
+  # ==========================================
+  # 3. Hello World (helloworld)
+  # ==========================================
+
+  helloworld-go:
+    build: ./docker-images/go
+    volumes:
+      - ./data/helloworld/src:/src
+      - ./data/helloworld/go:/output
+    # TinyGoでビルド
+    command: tinygo build -o /output/helloworld.wasm -target=wasm -no-debug /src/helloworld.go
+
+  # ==========================================
+  # 4. FizzBuzz (fizzbuzz)
+  # ==========================================
+
+  fizzbuzz-go:
+    build: ./docker-images/go
+    volumes:
+      - ./data/fizzbuzz/src:/src
+      - ./data/fizzbuzz/go:/output
+    # TinyGoでビルド
+    command: tinygo build -o /output/fizzbuzz.wasm -target=wasm -no-debug /src/fizzbuzz.go
+
+  fizzbuzz-c:
+    build: ./docker-images/c
+    volumes:
+      - ./data/fizzbuzz/src:/src
+      - ./data/fizzbuzz/c:/output
+    # 最適化オプション -O3 を指定
+    command: emcc /src/fizzbuzz.c -O3 -o /output/fizzbuzz.wasm
+
+  # ==========================================
+  # 5. Word Count (wordcount)
+  # ==========================================
+
+  wordcount-go:
+    build: ./docker-images/go
+    volumes:
+      - ./data/wordcount/src:/src
+      - ./data/wordcount/go:/output
+    # TinyGoでビルド
+    command: tinygo build -o /output/wordcount.wasm -target=wasm -no-debug /src/wordcount.go
+
+  wordcount-c:
+    build: ./docker-images/c
+    volumes:
+      - ./data/wordcount/src:/src
+      - ./data/wordcount/c:/output
+    # 最適化オプション -O3 を指定
+    command: emcc /src/wordcount.c -O3 -o /output/wordcount.wasm
+
+  helloworld-ts:
+    build: ./docker-images/ts
+    volumes:
+      - ./data/helloworld/src:/src
+      - ./data/helloworld/ts:/output
+    # -O3: 最適化
+    command: asc /src/helloworld.ts -O3 --outFile /output/helloworld.wasm
