@@ -69,3 +69,11 @@ services:
       - ./data/collatz/src:/src
       - ./data/collatz/js:/output
     command: javy compile /src/collatz.js -o /output/collatz.wasm
+
+  collatz-rust:
+    build: ./docker-images/rust
+    volumes:
+      - ./data/collatz/src:/src
+      - ./data/collatz/rust:/output
+    # 最適化(-O)をしてライブラリ形式(cdylib)でビルド
+    command: rustc /src/lib.rs --crate-type=cdylib --target=wasm32-unknown-unknown -O -o /output/collatz.wasm
