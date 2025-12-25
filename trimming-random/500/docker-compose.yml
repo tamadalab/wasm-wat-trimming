@@ -109,3 +109,11 @@ services:
       - ./data/fizzbuzz/go:/output
     # TinyGoでビルド
     command: tinygo build -o /output/fizzbuzz.wasm -target=wasm -no-debug /src/fizzbuzz.go
+
+  fizzbuzz-c:
+    build: ./docker-images/c
+    volumes:
+      - ./data/fizzbuzz/src:/src
+      - ./data/fizzbuzz/c:/output
+    # 最適化オプション -O3 を指定
+    command: emcc /src/fizzbuzz.c -O3 -o /output/fizzbuzz.wasm
