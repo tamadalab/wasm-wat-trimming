@@ -5,6 +5,7 @@ services:
   # 1. Bubble Sort (bubsort)
   # ソース: data/bubsort/src/
   # ==========================================
+
   bubsort-c:
     build: ./docker-images/c
     volumes:
@@ -48,3 +49,15 @@ services:
     # --crate-type=cdylib: C互換の動的ライブラリとしてビルド（Wasmではこれが標準）
     # -O: 最適化
     command: rustc /src/lib.rs --crate-type=cdylib --target=wasm32-unknown-unknown -O -o /output/bubsort.wasm
+
+  # ==========================================
+  # 2. Collatz Problem (collatz)
+  # ==========================================
+
+  collatz-go:
+    build: ./docker-images/go
+    volumes:
+      - ./data/collatz/src:/src
+      - ./data/collatz/go:/output
+    # Bubble Sortと同じオプション設定
+    command: tinygo build -o /output/collatz.wasm -target=wasm -no-debug /src/collatz.go
