@@ -77,3 +77,11 @@ services:
       - ./data/collatz/rust:/output
     # 最適化(-O)をしてライブラリ形式(cdylib)でビルド
     command: rustc /src/lib.rs --crate-type=cdylib --target=wasm32-unknown-unknown -O -o /output/collatz.wasm
+
+  collatz-c:
+    build: ./docker-images/c
+    volumes:
+      - ./data/collatz/src:/src
+      - ./data/collatz/c:/output
+    # -O3: 最適化レベル3
+    command: emcc /src/collatz.c -O3 -o /output/collatz.wasm
