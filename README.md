@@ -26,6 +26,7 @@ Wasm/WAT ファイルの類似度比較や解析において、ファイルサ�
 | **JavaScript**  | Javy                         | `v3.0.1`                | QuickJS エンジン内蔵                    |
 | **TypeScript**  | AssemblyScript (`asc`)       | `latest` (npm)          | 最適化オプション: `-O3`                 |
 | **Go**          | TinyGo                       | `latest` (Docker Image) | オプション: `-no-debug`, target: `wasm` |
+| **Rust**        | rustc                        | `latest` (Docker Image) | target: `wasm32-unknown-unknown`        |
 
 ### コンパイル (Wasm 生成):
 
