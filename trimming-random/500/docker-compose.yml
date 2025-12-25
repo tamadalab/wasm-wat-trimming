@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # 1. Bubble Sort (bubsort)
+  # ソース: data/bubsort/src/
+  # ==========================================
+  bubsort-c:
+    build: ./docker-images/c
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/c:/output
+    command: emcc /src/bubsうort.c -O3 -o /output/bubsort.wasm
