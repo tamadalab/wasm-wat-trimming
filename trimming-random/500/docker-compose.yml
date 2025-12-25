@@ -11,3 +11,11 @@ services:
       - ./data/bubsort/src:/src
       - ./data/bubsort/c:/output
     command: emcc /src/bubsうort.c -O3 -o /output/bubsort.wasm
+
+  bubsort-js:
+    build: ./docker-images/js
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/js:/output
+    # Javyを使って JS -> Wasm にコンパイル
+    command: javy compile /src/bubsort.js -o /output/bubsort.wasm
