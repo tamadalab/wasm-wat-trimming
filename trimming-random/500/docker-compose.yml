@@ -38,3 +38,13 @@ services:
     # -target=wasm: Wasm向けにビルド
     # -no-debug: デバッグ情報を削除してWATファイルを読みやすくする（構造分析に推奨）
     command: tinygo build -o /output/bubsort.wasm -target=wasm -no-debug /src/bubsort.go
+
+  bubsort-rust:
+    build: ./docker-images/rust
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/rust:/output
+    # rustcコマンドでコンパイル
+    # --crate-type=cdylib: C互換の動的ライブラリとしてビルド（Wasmではこれが標準）
+    # -O: 最適化
+    command: rustc /src/lib.rs --crate-type=cdylib --target=wasm32-unknown-unknown -O -o /output/bubsort.wasm
