@@ -117,3 +117,15 @@ services:
       - ./data/fizzbuzz/c:/output
     # 最適化オプション -O3 を指定
     command: emcc /src/fizzbuzz.c -O3 -o /output/fizzbuzz.wasm
+
+  # ==========================================
+  # 5. Word Count (wordcount)
+  # ==========================================
+  
+  wordcount-go:
+    build: ./docker-images/go
+    volumes:
+      - ./data/wordcount/src:/src
+      - ./data/wordcount/go:/output
+    # TinyGoでビルド
+    command: tinygo build -o /output/wordcount.wasm -target=wasm -no-debug /src/wordcount.go
