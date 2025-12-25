@@ -121,7 +121,7 @@ services:
   # ==========================================
   # 5. Word Count (wordcount)
   # ==========================================
-  
+
   wordcount-go:
     build: ./docker-images/go
     volumes:
@@ -129,3 +129,11 @@ services:
       - ./data/wordcount/go:/output
     # TinyGoでビルド
     command: tinygo build -o /output/wordcount.wasm -target=wasm -no-debug /src/wordcount.go
+
+  wordcount-c:
+    build: ./docker-images/c
+    volumes:
+      - ./data/wordcount/src:/src
+      - ./data/wordcount/c:/output
+    # 最適化オプション -O3 を指定
+    command: emcc /src/wordcount.c -O3 -o /output/wordcount.wasm
