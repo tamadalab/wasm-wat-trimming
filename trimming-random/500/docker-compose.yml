@@ -19,3 +19,13 @@ services:
       - ./data/bubsort/js:/output
     # Javyを使って JS -> Wasm にコンパイル
     command: javy compile /src/bubsort.js -o /output/bubsort.wasm
+
+  bubsort-ts:
+    build: ./docker-images/ts
+    volumes:
+      - ./data/bubsort/src:/src
+      - ./data/bubsort/ts:/output
+    # ascコマンドでコンパイル
+    # -O3: 最適化レベル3 (C言語の指定と合わせる)
+    # --outFile: 出力先
+    command: asc /src/bubsort.ts -O3 --outFile /output/bubsort.wasm
