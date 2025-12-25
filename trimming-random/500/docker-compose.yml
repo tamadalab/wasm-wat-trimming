@@ -61,3 +61,11 @@ services:
       - ./data/collatz/go:/output
     # Bubble Sortと同じオプション設定
     command: tinygo build -o /output/collatz.wasm -target=wasm -no-debug /src/collatz.go
+
+  collatz-js:
+    build: ./docker-images/js
+    platform: linux/amd64   # Javyがx86_64用のため必須
+    volumes:
+      - ./data/collatz/src:/src
+      - ./data/collatz/js:/output
+    command: javy compile /src/collatz.js -o /output/collatz.wasm
