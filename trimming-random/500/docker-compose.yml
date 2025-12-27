@@ -155,3 +155,10 @@ services:
     volumes:        
       - .:/app      
     command: /bin/bash ./scripts/convert_to_wat.sh
+
+  extractor-original:
+    build: ./docker-images/python
+    volumes:
+      - .:/app
+    # 引数として ./output/not_trimmed を渡す
+    command: /bin/bash ./scripts/run_extraction.sh ./output/not_trimmed
