@@ -99,12 +99,12 @@ services:
     command: tinygo build -o /output/helloworld.wasm -target=wasm -no-debug /src/helloworld.go
 
   helloworld-ts:
-  build: ./docker-images/ts
-  volumes:
-    - ./data/helloworld/src:/src
-    - ./data/helloworld/ts:/output
+    build: ./docker-images/ts
+    volumes:
+      - ./data/helloworld/src:/src
+      - ./data/helloworld/ts:/output
   # -O3: 最適化
-  command: asc /src/helloworld.ts -O3 --outFile /output/helloworld.wasm
+    command: asc /src/helloworld.ts -O3 --outFile /output/helloworld.wasm
 
   # ==========================================
   # 4. FizzBuzz (fizzbuzz)
@@ -145,3 +145,13 @@ services:
       - ./data/wordcount/c:/output
     # 最適化オプション -O3 を指定
     command: emcc /src/wordcount.c -O3 -o /output/wordcount.wasm
+
+# ==========================================
+# Utility: Wasm to Wat Converter (WABT)
+# ==========================================
+
+  converter:
+    build: ./docker-images/wabt
+    volumes:        
+      - .:/app      
+    command: /bin/bash ./scripts/convert_to_wat.sh
