@@ -98,6 +98,14 @@ services:
     # TinyGoでビルド
     command: tinygo build -o /output/helloworld.wasm -target=wasm -no-debug /src/helloworld.go
 
+  helloworld-ts:
+    build: ./docker-images/ts
+    volumes:
+      - ./data/helloworld/src:/src
+      - ./data/helloworld/ts:/output
+  # -O3: 最適化
+    command: asc /src/helloworld.ts -O3 --outFile /output/helloworld.wasm
+
   # ==========================================
   # 4. FizzBuzz (fizzbuzz)
   # ==========================================
@@ -138,10 +146,19 @@ services:
     # 最適化オプション -O3 を指定
     command: emcc /src/wordcount.c -O3 -o /output/wordcount.wasm
 
-  helloworld-ts:
-    build: ./docker-images/ts
+# ==========================================
+# Utility: Wasm to Wat Converter (WABT)
+# ==========================================
+
+  converter:
+    build: ./docker-images/wabt
+    volumes:        
+      - .:/app      
+    command: /bin/bash ./scripts/convert_to_wat.sh
+
+  extractor-original:
+    build: ./docker-images/python
     volumes:
-      - ./data/helloworld/src:/src
-      - ./data/helloworld/ts:/output
-    # -O3: 最適化
-    command: asc /src/helloworld.ts -O3 --outFile /output/helloworld.wasm
+      - .:/app
+    # 引数として ./output/not_trimmed を渡す
+    command: /bin/bash ./scripts/run_extraction.sh ./output/not_trimmed
