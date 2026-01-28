@@ -1,0 +1,17 @@
+# Python dependencies for wasm-wat-trimming project
+# Python 3.8以上が必要
+
+# 数値計算
+numpy>=1.21.0
+
+# データフレーム操作・CSV処理
+pandas>=1.3.0
+
+# グラフ描画
+matplotlib>=3.4.0
+
+# ヒートマップ描画
+seaborn>=0.11.0
+
+# YAMLファイル読み込み（評価設定ファイル用）
+pyyaml>=5.4.0
